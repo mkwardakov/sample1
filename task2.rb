@@ -1,38 +1,28 @@
 #!/usr/bin/env ruby
-require 'github_api'
-require 'io/console'
+require 'open-uri'
+require 'json'
 
 type = ARGV[0]
 repo = ARGV[1]
 
 # check for parameters
-if type.nil? || repo.nil? || (type != "issues" && type != "pulls") || repo.match(/[[:alnum:]]+\/[[:alnum:]]+/) == nil
-    puts "Usage: "
+if type.nil? || repo.nil? || (type != "issues" && type != "pulls") || repo.match(/[\w\.\-\@]+\/[\w\.\-]+/).nil?
+    puts "Sample script that shows doc stats for a github repo."
+    puts "usage: pulls|issues github/repo"
     puts "Example: ruby myprog.rb issues openshift/origin"
     exit 1
 end
-repo_user, repo_name = repo.scan(/[[:alnum:]]+/)
-
-# github authorization
-print "Please enter github user: "
-# github_user     = STDIN.gets.strip
-github_user     = 'mkwardakov'
-print "And password: "
-# github_password = STDIN.noecho(&:gets).strip
-github_password = ''
-
-# now ask github
-github = Github.new basic_auth: "#{github_user}:#{github_password}", user: repo_user, repo: repo_name
+repo_user, repo_name = repo.scan(/([\w\.\-\@]+)\/([\w\.\-]+)/)[0]
+type = 'pr' if 'pulls' == type
+# now ask github twice for open and closed issues, dependent of type
 begin
-    case type
-    when 'issues'
-        reply = github.
-        puts "#{repo} issues: closed, #{reply.body['total_count']} open"
-    when 'pulls'
-        reply = github.search.issues q: "user=#{repo_user}+repo=#{repo_name}"
-        puts "#{repo} pull requests: #{reply.body['total_count']}"
+    rep = {}
+    ['open', 'closed'].each do |state|
+        body = URI.parse("https://api.github.com/search/issues?q=type:#{type}+state:#{state}+user:#{repo_user}+repo:#{repo_name}").read
+        rep[state] = JSON.parse(body)['total_count']
     end
-rescue Github::Error::GithubError => err
+    puts "#{repo} #{'pr' == type ? 'pull requests' : 'issues'}: #{rep['closed']} closed, #{rep['open']} open"
+rescue URI::Error => err
     puts err.message
     exit 1
 end
