@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: UTF-8
 require 'test/unit'
 require_relative 'task1.rb'
 
@@ -18,6 +19,7 @@ class MymethodTest < Test::Unit::TestCase
         assert(mymethod([]).empty?)
         assert_equal(mymethod(['']), [''])
         assert_equal(mymethod(['', 'Subaru']), ['Subaru - this guy knows what to do', ''])
+        assert_equal(mymethod(['Москвич', 'Жигули']), ['Жигули', 'Москвич'])
     end
 
     def test_negative
