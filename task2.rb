@@ -18,7 +18,7 @@ type = 'pr' if 'pulls' == type
 begin
     rep = {}
     %w(open closed).each do |state|
-        request = "https://api.github.com/search/issues?q=type:#{type}+state:#{state}+user:#{repo_user}+repo:#{repo_name}"
+        request = "https://api.github.com/search/issues?q=type:#{type}+state:#{state}+repo:#{repo}"
         body = URI.parse(request).read
         rep[state] = JSON.parse(body)['total_count']
     end
