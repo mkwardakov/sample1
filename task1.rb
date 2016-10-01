@@ -17,9 +17,8 @@ def mymethod(str_arr)
             sub = new_arr.slice!(ind) << ' - this guy knows what to do'
             new_arr.insert(foresters + subarus, sub)
             subarus += 1
-        else
-            ind += 1
         end
+        ind += 1
     end
     new_arr
 end

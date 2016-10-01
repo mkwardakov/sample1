@@ -11,6 +11,7 @@ class MymethodTest < Test::Unit::TestCase
         out1 = ['Subaru Forester - this guy knows what to do very well', 'Subaru - this guy knows what to do', 'Subaru WRX - this guy knows what to do', 'Subaru Impreza - this guy knows what to do', 'GM', 'Kia', 'Jeep', 'Audi', 'Opel', 'Skoda', 'Hyundai', 'Peugeot', 'Mercedes', 'VAZ 2106', 'Vauxhall', 'Chevrolet', 'Lada XRay', 'Volkswagen', 'Mitsubishi', 'Great Wall', 'Opel Astra', 'Toyota RAV4', 'Hyundai i30', 'Lexus LS300', 'Kia Sportage', 'Suzuki GSR600', 'Yamaha YBR125', 'Porsche Macan', 'Toyota Corolla', 'Renault Sandero', 'Volkswagen Passat', 'Yamaha MidnightStar XVS950A']
         out2 = ['Subaru Forester - this guy knows what to do very well', 'Subaru Exiga - this guy knows what to do', 'Subaru Impreza - this guy knows what to do', 'asd', 'aasd']
         assert_equal(mymethod(['Opel']), ['Opel'])
+        assert_equal(mymethod(["Subaru Impreza", "Subaru Forester"]), ["Subaru Forester - this guy knows what to do very well", "Subaru Impreza - this guy knows what to do"])
         assert_equal(mymethod(in1), out1)
         assert_equal(mymethod(in2), out2)
     end
